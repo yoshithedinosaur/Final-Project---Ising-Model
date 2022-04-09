@@ -3,7 +3,7 @@
 import SwiftUI
 
 @main
-struct ___PARENTPACKAGENAME:identifier___App: App {
+struct Final_Project___Ising_ModelApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
