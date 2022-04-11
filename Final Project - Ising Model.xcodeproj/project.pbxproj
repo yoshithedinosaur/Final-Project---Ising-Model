@@ -27,10 +27,14 @@
 		A356C0042800B41800A57928 /* PlotClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356C0022800B41800A57928 /* PlotClass.swift */; };
 		A356C0062800B43E00A57928 /* ChangingPlotParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356C0052800B43E00A57928 /* ChangingPlotParameters.swift */; };
 		A356C0072800B43E00A57928 /* ChangingPlotParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356C0052800B43E00A57928 /* ChangingPlotParameters.swift */; };
-		A356C0092800B68000A57928 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356C0082800B68000A57928 /* TileView.swift */; };
-		A356C00A2800B68000A57928 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356C0082800B68000A57928 /* TileView.swift */; };
+		A356C0092800B68000A57928 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356C0082800B68000A57928 /* GridView.swift */; };
+		A356C00A2800B68000A57928 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356C0082800B68000A57928 /* GridView.swift */; };
 		A356C00C2802186E00A57928 /* MetropolisAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356C00B2802186E00A57928 /* MetropolisAlgorithm.swift */; };
 		A356C00D2802186E00A57928 /* MetropolisAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356C00B2802186E00A57928 /* MetropolisAlgorithm.swift */; };
+		A3D79D7528033599006DC3BB /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7428033599006DC3BB /* DrawingView.swift */; };
+		A3D79D7628033599006DC3BB /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7428033599006DC3BB /* DrawingView.swift */; };
+		A3D79D7828037F30006DC3BB /* ScatterPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7728037F30006DC3BB /* ScatterPlot.swift */; };
+		A3D79D7928037F30006DC3BB /* ScatterPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7728037F30006DC3BB /* ScatterPlot.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,8 +71,10 @@
 		A356BFFF2800B3F300A57928 /* PlotDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlotDataClass.swift; sourceTree = "<group>"; };
 		A356C0022800B41800A57928 /* PlotClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlotClass.swift; sourceTree = "<group>"; };
 		A356C0052800B43E00A57928 /* ChangingPlotParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangingPlotParameters.swift; sourceTree = "<group>"; };
-		A356C0082800B68000A57928 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
+		A356C0082800B68000A57928 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		A356C00B2802186E00A57928 /* MetropolisAlgorithm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetropolisAlgorithm.swift; sourceTree = "<group>"; };
+		A3D79D7428033599006DC3BB /* DrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingView.swift; sourceTree = "<group>"; };
+		A3D79D7728037F30006DC3BB /* ScatterPlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterPlot.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +130,9 @@
 				A356BFBB2800B1B600A57928 /* ContentView.swift */,
 				A356BFBC2800B1B800A57928 /* Assets.xcassets */,
 				A356C00B2802186E00A57928 /* MetropolisAlgorithm.swift */,
-				A356C0082800B68000A57928 /* TileView.swift */,
+				A356C0082800B68000A57928 /* GridView.swift */,
+				A3D79D7428033599006DC3BB /* DrawingView.swift */,
+				A3D79D7728037F30006DC3BB /* ScatterPlot.swift */,
 				A356C0052800B43E00A57928 /* ChangingPlotParameters.swift */,
 				A356C0022800B41800A57928 /* PlotClass.swift */,
 				A356BFFF2800B3F300A57928 /* PlotDataClass.swift */,
@@ -345,13 +353,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				A356BFFD2800B3D000A57928 /* CorePlot.swift in Sources */,
+				A3D79D7528033599006DC3BB /* DrawingView.swift in Sources */,
 				A356C00C2802186E00A57928 /* MetropolisAlgorithm.swift in Sources */,
-				A356C0092800B68000A57928 /* TileView.swift in Sources */,
+				A356C0092800B68000A57928 /* GridView.swift in Sources */,
 				A356C0002800B3F300A57928 /* PlotDataClass.swift in Sources */,
 				A356BFE42800B1B900A57928 /* ContentView.swift in Sources */,
 				A356BFE22800B1B900A57928 /* Final_Project___Ising_ModelApp.swift in Sources */,
 				A356C0032800B41800A57928 /* PlotClass.swift in Sources */,
 				A356C0062800B43E00A57928 /* ChangingPlotParameters.swift in Sources */,
+				A3D79D7828037F30006DC3BB /* ScatterPlot.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,13 +370,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				A356BFFE2800B3D000A57928 /* CorePlot.swift in Sources */,
+				A3D79D7628033599006DC3BB /* DrawingView.swift in Sources */,
 				A356C00D2802186E00A57928 /* MetropolisAlgorithm.swift in Sources */,
-				A356C00A2800B68000A57928 /* TileView.swift in Sources */,
+				A356C00A2800B68000A57928 /* GridView.swift in Sources */,
 				A356C0012800B3F300A57928 /* PlotDataClass.swift in Sources */,
 				A356BFE52800B1B900A57928 /* ContentView.swift in Sources */,
 				A356BFE32800B1B900A57928 /* Final_Project___Ising_ModelApp.swift in Sources */,
 				A356C0042800B41800A57928 /* PlotClass.swift in Sources */,
 				A356C0072800B43E00A57928 /* ChangingPlotParameters.swift in Sources */,
+				A3D79D7928037F30006DC3BB /* ScatterPlot.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -523,7 +535,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = HZ8BHG3P39;
-				ENABLE_PREVIEWS = YES;
+				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -553,7 +565,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = HZ8BHG3P39;
-				ENABLE_PREVIEWS = YES;
+				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

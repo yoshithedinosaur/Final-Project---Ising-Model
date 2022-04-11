@@ -7,9 +7,12 @@
 
 import Foundation
 
-class MetropolisAlgorithm: ObservableObject {
+class MetropolisAlgorithm: NSObject, ObservableObject {
     
-    let exchangeEnergy = 0.0
+    @Published var enableButton = true
+
+    
+    let exchangeEnergy = 1.0
     let kB = 8.617333262145e-5 // [eV/K]
     
     
@@ -20,11 +23,12 @@ class MetropolisAlgorithm: ObservableObject {
         var deltaConfigEnergy = 0.0
         var deltaSpinSum: Int = 0
         
+        // Flip a randomly chosen spin
         trialSpinVector[spinFlipIndex] = -spinVector[spinFlipIndex]
         
         // Only the differences between the pairs including the changed spin remain
         for i in spinFlipIndex-1...spinFlipIndex {
-            deltaSpinSum += trialSpinVector[i%numberOfAtoms] * trialSpinVector[(i+1)%numberOfAtoms] - spinVector[i%numberOfAtoms] * spinVector[(i+1)%numberOfAtoms]
+            deltaSpinSum += trialSpinVector[modulo(dividend: i, divisor: numberOfAtoms)] * trialSpinVector[modulo(dividend: i+1, divisor: numberOfAtoms)] - spinVector[modulo(dividend: i, divisor: numberOfAtoms)] * spinVector[modulo(dividend: i+1, divisor: numberOfAtoms)]
         }
         
         deltaConfigEnergy = -exchangeEnergy * Double(deltaSpinSum)
@@ -35,8 +39,8 @@ class MetropolisAlgorithm: ObservableObject {
             
         } else { // accept or reject with probability r
             
-            let relP = exp(-deltaConfigEnergy/(kB * tempurature))
-            
+            //let relP = exp(-deltaConfigEnergy/(kB * tempurature))
+            let relP = exp(-deltaConfigEnergy/(kB * tempurature)) //kB*T=1 in units of J
             
             if relP >= Double.random(in: 0.0...1.0) { // accept
                 
@@ -48,6 +52,47 @@ class MetropolisAlgorithm: ObservableObject {
                 
             }
             
+        }
+        
+    }
+    
+    ///modulo: swift is stupid and '%' sign is NOT modulo, but means remainder so now I have to make own damn modulo function because the folks at apple thought they were too quirky to make '%' work the right way
+    ///parameters: divident, divisor
+    ///return: modulo of dividend and divisor
+    func modulo(dividend: Int, divisor: Int) -> Int {
+        return dividend - Int((Double(dividend)/Double(divisor)) * Double(divisor))
+    }
+    
+    
+    /// setButton Enable
+    /// Toggles the state of the Enable Button on the Main Thread
+    /// - Parameter state: Boolean describing whether the button should be enabled.
+    @MainActor func setButtonEnable(state: Bool){
+        
+        
+        if state {
+            
+            Task.init {
+                await MainActor.run {
+                    
+                    
+                    self.enableButton = true
+                }
+            }
+            
+            
+                
+        }
+        else{
+            
+            Task.init {
+                await MainActor.run {
+                    
+                    
+                    self.enableButton = false
+                }
+            }
+                
         }
         
     }
