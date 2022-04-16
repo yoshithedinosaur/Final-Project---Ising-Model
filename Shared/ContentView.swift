@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var simulationStepsString = "10"
     @State private var startState = "Cold"
     @State private var finalState1D: [Int] = [Int](repeating: 1, count: 16) // dummy values
-    @State var colorPalette: [Color] = [.black, .red]
+    @State var colorPalette: [Color] = [.yellow, .blue]
     @State var simSteps: Int = 0
     @State var countOfRows: Int = 16
     @State var startStateSelect = ["Hot", "Cold"]
@@ -47,7 +47,8 @@ struct ContentView: View {
                     drawingView(colors: $colorPalette, inputVector: $finalState1D, countOfRows: $countOfRows, simSteps: $viewSteps)
                         .aspectRatio(1, contentMode: .fit)
                         .drawingGroup()
-                    //.frame(width: 500, height: 500)
+                        .blur(radius: 0)
+                        //.frame(width: 500, height: 500)
                 }
                 
                 Text("Time")
@@ -100,6 +101,8 @@ struct ContentView: View {
 
             }
             .padding()
+            
+            //Text("Note to self: Still need to add the statisitcs graphs and temperature.")
         
         }
     

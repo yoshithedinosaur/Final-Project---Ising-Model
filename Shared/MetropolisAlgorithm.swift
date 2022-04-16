@@ -13,8 +13,8 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
 
     
     let exchangeEnergy = 1.0
-    let kB = 8.617333262145e-5 // [eV/K]
-    
+    //let kB = 8.617333262145e-5 // [eV/K]
+    let kB = 1.0 //test value
     
     func updateSpinVector1D(tempurature: Double, numberOfAtoms: Int, spinVector: [Int]) -> [Int] {
         
@@ -30,11 +30,15 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
         for i in spinFlipIndex-1...spinFlipIndex {
             deltaSpinSum += trialSpinVector[modulo(dividend: i, divisor: numberOfAtoms)] * trialSpinVector[modulo(dividend: i+1, divisor: numberOfAtoms)] - spinVector[modulo(dividend: i, divisor: numberOfAtoms)] * spinVector[modulo(dividend: i+1, divisor: numberOfAtoms)]
         }
+        //print("\(spinVector)")
+        //print("\(trialSpinVector)")
         
         deltaConfigEnergy = -exchangeEnergy * Double(deltaSpinSum)
+        //print("\(deltaConfigEnergy)")
         
         if deltaConfigEnergy <= 0 { // accept
             
+            print("accepted at 1")
             return trialSpinVector
             
         } else { // accept or reject with probability r
@@ -44,10 +48,12 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
             
             if relP >= Double.random(in: 0.0...1.0) { // accept
                 
+                print("accepted at \(relP)")
                 return trialSpinVector
                 
             } else { // reject
                 
+                print("rejected at \(relP)")
                 return spinVector
                 
             }
@@ -60,7 +66,9 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
     ///parameters: divident, divisor
     ///return: modulo of dividend and divisor
     func modulo(dividend: Int, divisor: Int) -> Int {
-        return dividend - Int((Double(dividend)/Double(divisor)) * Double(divisor))
+        let val = dividend - Int(floor((Double(dividend)/Double(divisor)))) * (divisor)
+        //print("\(val)")
+        return val
     }
     
     
