@@ -30,9 +30,9 @@ struct drawingView: View {
         }*/
         ZStack{
             drawModel(rows: countOfRows, simSteps: simSteps, drawingPoints: colorizedDataPoints.blackPoints)
-                .fill(.black)
+                .fill(colors[0])
             drawModel(rows: countOfRows, simSteps: simSteps, drawingPoints: colorizedDataPoints.whitePoints)
-                .fill(.white)
+                .fill(colors[1])
         }
         .background(Color.white)
         .aspectRatio(1, contentMode: .fill)
@@ -114,6 +114,8 @@ struct ColorPoints {
         var colorizedPoints: (blackPoints: [(xPoint: Double, yPoint: Double)], whitePoints: [(xPoint: Double, yPoint: Double)]) = (blackPoints: [], whitePoints: [])
         var xPoint = 0.0
         var yPoint = 0.0
+        //var whiteCounter = 0.0
+        //var blackCounter = 0.0
         
         for i in 0..<colorCount {
             
@@ -124,14 +126,24 @@ struct ColorPoints {
                 
                 colorizedPoints.whitePoints.append( (xPoint: xPoint, yPoint: yPoint) )
                 
+                /*if xPoint == 2.0 * floor(Double(colorCount-1)/Double(countOfRows)) / Double(simSteps) - 1.0 {
+                    whiteCounter += 1.0
+                }*/
+                
             } else {
                 
                 colorizedPoints.blackPoints.append( (xPoint: xPoint, yPoint: yPoint) )
+                
+                /*if xPoint == 2.0 * floor(Double(colorCount-1)/Double(countOfRows)) / Double(simSteps) - 1.0 {
+                    blackCounter += 1.0
+                }*/
                 
             }
             
             
         }
+        
+        //print("Ratio: \(blackCounter/whiteCounter)")
         
         //print("\(colorizedPoints)")
         return colorizedPoints

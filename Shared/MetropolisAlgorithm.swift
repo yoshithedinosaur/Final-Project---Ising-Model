@@ -38,7 +38,7 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
         
         if deltaConfigEnergy <= 0 { // accept
             
-            print("accepted at 1")
+            //print("accepted at 1")
             return trialSpinVector
             
         } else { // accept or reject with probability r
@@ -48,12 +48,12 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
             
             if relP >= Double.random(in: 0.0...1.0) { // accept
                 
-                print("accepted at \(relP)")
+                //print("accepted at \(relP)")
                 return trialSpinVector
                 
             } else { // reject
                 
-                print("rejected at \(relP)")
+                //print("rejected at \(relP)")
                 return spinVector
                 
             }
@@ -61,6 +61,8 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
         }
         
     }
+    
+    
     
     ///modulo: swift is stupid and '%' sign is NOT modulo, but means remainder so now I have to make own damn modulo function because the folks at apple thought they were too quirky to make '%' work the right way
     ///parameters: divident, divisor
