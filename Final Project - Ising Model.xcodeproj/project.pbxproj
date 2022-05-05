@@ -33,8 +33,8 @@
 		A356C00D2802186E00A57928 /* MetropolisAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356C00B2802186E00A57928 /* MetropolisAlgorithm.swift */; };
 		A3D79D7528033599006DC3BB /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7428033599006DC3BB /* DrawingView.swift */; };
 		A3D79D7628033599006DC3BB /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7428033599006DC3BB /* DrawingView.swift */; };
-		A3D79D7828037F30006DC3BB /* ScatterPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7728037F30006DC3BB /* ScatterPlot.swift */; };
-		A3D79D7928037F30006DC3BB /* ScatterPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7728037F30006DC3BB /* ScatterPlot.swift */; };
+		A3D79D7828037F30006DC3BB /* PlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7728037F30006DC3BB /* PlotView.swift */; };
+		A3D79D7928037F30006DC3BB /* PlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7728037F30006DC3BB /* PlotView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,7 +74,7 @@
 		A356C0082800B68000A57928 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		A356C00B2802186E00A57928 /* MetropolisAlgorithm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetropolisAlgorithm.swift; sourceTree = "<group>"; };
 		A3D79D7428033599006DC3BB /* DrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingView.swift; sourceTree = "<group>"; };
-		A3D79D7728037F30006DC3BB /* ScatterPlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterPlot.swift; sourceTree = "<group>"; };
+		A3D79D7728037F30006DC3BB /* PlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlotView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,7 +132,7 @@
 				A356C00B2802186E00A57928 /* MetropolisAlgorithm.swift */,
 				A356C0082800B68000A57928 /* GridView.swift */,
 				A3D79D7428033599006DC3BB /* DrawingView.swift */,
-				A3D79D7728037F30006DC3BB /* ScatterPlot.swift */,
+				A3D79D7728037F30006DC3BB /* PlotView.swift */,
 				A356C0052800B43E00A57928 /* ChangingPlotParameters.swift */,
 				A356C0022800B41800A57928 /* PlotClass.swift */,
 				A356BFFF2800B3F300A57928 /* PlotDataClass.swift */,
@@ -361,7 +361,7 @@
 				A356BFE22800B1B900A57928 /* Final_Project___Ising_ModelApp.swift in Sources */,
 				A356C0032800B41800A57928 /* PlotClass.swift in Sources */,
 				A356C0062800B43E00A57928 /* ChangingPlotParameters.swift in Sources */,
-				A3D79D7828037F30006DC3BB /* ScatterPlot.swift in Sources */,
+				A3D79D7828037F30006DC3BB /* PlotView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,7 +378,7 @@
 				A356BFE32800B1B900A57928 /* Final_Project___Ising_ModelApp.swift in Sources */,
 				A356C0042800B41800A57928 /* PlotClass.swift in Sources */,
 				A356C0072800B43E00A57928 /* ChangingPlotParameters.swift in Sources */,
-				A3D79D7928037F30006DC3BB /* ScatterPlot.swift in Sources */,
+				A3D79D7928037F30006DC3BB /* PlotView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
