@@ -161,16 +161,28 @@ struct ContentView: View {
                 
                 VStack{
                     
-                    Slider(value: $numberOfAtoms,
-                       in: 100...2000,
-                       step: 100,
-                       onEditingChanged: { editing in isEditingAtoms = editing },
-                       minimumValueLabel: Text("100"),
-                       maximumValueLabel: Text("2000"),
-                       label: { Text("Number of atoms:") })
+                    if is1D {
+                        Slider(value: $numberOfAtoms,
+                               in: 100...2000,
+                               step: 100,
+                               onEditingChanged: { editing in isEditingAtoms = editing },
+                               minimumValueLabel: Text("100"),
+                               maximumValueLabel: Text("2000"),
+                               label: { Text("Number of atoms:") })
+                    } else {
+                        Slider(value: $numberOfAtoms,
+                               in: 50...500,
+                               step: 50,
+                               onEditingChanged: { editing in isEditingAtoms = editing },
+                               minimumValueLabel: Text("50"),
+                               maximumValueLabel: Text("500"),
+                               label: { Text("Atom grid size:") })
+                            .disabled(!pauseStatus)
+                    }
                 
                     Text("\(Int(numberOfAtoms))")
                     .foregroundColor(isEditingAtoms ? .red : .blue)
+                    
                 
                     HStack{
                         
@@ -186,10 +198,12 @@ struct ContentView: View {
                         Text("Temperature")
                         TextField("Temperature", text: $temperatureString)
                             .frame(width: 50)
-                
-                        Text("Simulation steps")
-                        TextField("Steps", text: $simulationStepsString)
+                        
+                        if is1D {
+                            Text("Simulation steps")
+                            TextField("Steps", text: $simulationStepsString)
                             .frame(width: 50)
+                        }
                         
                     }
                     
@@ -213,10 +227,30 @@ struct ContentView: View {
                         .frame(width: 200.0)
                         .disabled(isingSim.enableButton == false)
                     } else {
-                        Button("Simulate 2D", action: { Task.init { await self.ising2D() } } )
-                            .padding()
-                            .frame(width: 200.0)
-                            .disabled(isingSim.enableButton == false)
+                        HStack {
+                            
+                            /*Button("Start Simulation", action: { Task.init { await self.ising2D() } } )
+                                .padding()
+                                .frame(width: 200.0)
+                                .disabled(isingSim.enableButton == false)*/
+                            
+                            Button(action: { Task.init { await self.ising2D() } }, label: { Image(systemName: "play.fill") } )
+                                .padding()
+                                .frame(width: 50)
+                                //.disabled(isingSim.enableButton == false)
+                            
+                            Button(action: { Task.init { await self.pauseSimulation() } }, label: { Image(systemName: "pause.fill") } )
+                                .padding()
+                                .frame(width: 50)
+                                //.disabled(isingSim.enableButton == false)
+                            
+                            Button(action: { Task.init { await self.resetSimulation() } }, label: { Image(systemName: "arrow.clockwise") } )
+                                .padding()
+                                .frame(width: 50)
+                                //.disabled(isingSim.enableButton == false)
+                            
+                        }
+                        
                     }
                     
                 }
@@ -230,23 +264,28 @@ struct ContentView: View {
     
     }
     
+    
+    /// prepares an initial state
     func generateInitialState(numberOfAtoms: Int, startState: String) -> [Int] {
         
         let spinVals: [Int] = [-1, 1]
+        var arraySize: Int = 0
+        
+        if is1D {arraySize = numberOfAtoms} else {arraySize = numberOfAtoms * numberOfAtoms}
         
         switch startState {
             
         case "Hot":
-            let spinVector: [Int] = (0..<numberOfAtoms).map{ _ in spinVals.randomElement()!}
+            let spinVector: [Int] = (0..<arraySize).map{ _ in spinVals.randomElement()!}
             return spinVector
             
         case "Cold":
-            let spinVector = [Int](repeating: -1, count: numberOfAtoms)
+            let spinVector = [Int](repeating: -1, count: arraySize)
             return spinVector
             
         default:
             print("This initial is state not supported. Defaulting to 'cold' start.")
-            return [Int](repeating: 1, count: numberOfAtoms)
+            return [Int](repeating: 1, count: arraySize)
             
         }
         
@@ -313,11 +352,15 @@ struct ContentView: View {
         ratioPlotModel.plotRatio(dataPoints: plottingPoints, xMax: Double(simSteps))
         
     
+        finalState = finalState1D
+        
         print("Simulation finished with \(finalState1D.count) data points.")
         
         isingSim.setButtonEnable(state: true)
         
     }
+    
+    
     
     
     func calculateInternalE (spinVector: [Int]) -> Double {
@@ -336,6 +379,30 @@ struct ContentView: View {
         return internalE
         
     }
+    
+    
+    
+    func calculateFluctuations (spinVector: [Int]) -> Double {
+        
+        var totE2: Int = 0
+        var flucE = 0.0
+        
+        for spinIndex in 0..<spinVector.count {
+                
+            totE2 = spinVector[isingSim.modulo(dividend: spinIndex, divisor: Int(numberOfAtoms))] * spinVector[isingSim.modulo(dividend: spinIndex+1, divisor: Int(numberOfAtoms))]
+            
+            flucE += pow(-isingSim.exchangeEnergy * Double(totE2), 2)
+            
+        }
+        
+        flucE = flucE / Double(spinVector.count)
+        
+        return flucE
+        
+    }
+    
+    
+    
     
     
     @MainActor func calculateSpecificHeat(numTrials: Int) async {
@@ -376,9 +443,9 @@ struct ContentView: View {
             
             }
             
-            avgIntE += Double(countOfRows) * calculateInternalE(spinVector: state1D)
+            avgIntE += /*Double(countOfRows) */ calculateInternalE(spinVector: state1D)
             
-            avgIntE2 += pow( Double(countOfRows) * calculateInternalE(spinVector: state1D), 2 )
+            avgIntE2 += calculateFluctuations(spinVector: state1D)
             
         }
         
@@ -530,19 +597,74 @@ struct ContentView: View {
             viewString = "2D Ising Model"
             is1D = false
             finalState = finalState2D
+            numberOfAtoms = min(numberOfAtoms, 500)
+            
         } else {
             viewString = "1D Ising Model"
             is1D = true
             finalState = finalState1D
+            await pauseSimulation()
         }
         
     }
     
     
-    @MainActor func ising2D() async {
+    @State var pauseStatus = true
     
+    @MainActor func ising2D() async {
+        
+        pauseStatus = false
+        
+        internalEnergyvsT.removeAll()
+        magnetizationvsT.removeAll()
+        fluctuationvsT.removeAll()
+        specificHeatvsT.removeAll()
+        hasButtonBeenPressed = false
+        
+        isingSim.setButtonEnable(state: false)
+        
+       
+        simSteps = Int(simulationStepsString) ?? 1
+        countOfRows = Int(numberOfAtoms)
+        viewSteps = countOfRows
+        
+        var spinVector = generateInitialState(numberOfAtoms: Int(numberOfAtoms), startState: startState)
+        
+        finalState = spinVector
+        
+        let timer = Timer.scheduledTimer(withTimeInterval: 0.000000001, repeats: true) { timer in
+            //print("delayed message")
+            
+            /*let _ = await withTaskGroup(of: Void.self) { taskGroup in taskGroup.addTask(priority: .high) {
+                <#code#>
+                }
+            }*/
+            for _ in 0...Int(stepsPerUpdate) {
+            spinVector = isingSim.updateSpinVector2D(tempurature: Double(temperatureString) ?? 0, numberOfAtoms: Int(numberOfAtoms), spinVector: spinVector)
+            
+            finalState = spinVector
+            }
+            
+            if pauseStatus {
+                timer.invalidate()
+            }
+            
+        }
+        
+        
     }
     
+    @MainActor func pauseSimulation() async {
+        print("pause button pressed")
+        pauseStatus = true
+    }
+    
+    
+    @MainActor func resetSimulation() async {
+        pauseStatus = true
+        viewSteps = Int(numberOfAtoms)
+        finalState = generateInitialState(numberOfAtoms: Int(numberOfAtoms), startState: startState)
+    }
     
 }
 

@@ -168,7 +168,7 @@ class SpecificHeatPlot: ObservableObject {
     @MainActor func plotSpecificHeat(dataPoints: [(xPoint: Double, yPoint: Double)], xMax: Double) {
         
         //set the Plot Parameters
-        plotDataModel!.changingPlotParameters.yMax = 1.2
+        plotDataModel!.changingPlotParameters.yMax = 5.0
         plotDataModel!.changingPlotParameters.yMin = -0.1
         plotDataModel!.changingPlotParameters.xMax = xMax
         plotDataModel!.changingPlotParameters.xMin = -xMax/10
