@@ -168,7 +168,7 @@ class SpecificHeatPlot: ObservableObject {
     @MainActor func plotSpecificHeat(dataPoints: [(xPoint: Double, yPoint: Double)], xMax: Double) {
         
         //set the Plot Parameters
-        plotDataModel!.changingPlotParameters.yMax = 5.0
+        plotDataModel!.changingPlotParameters.yMax = 0.4
         plotDataModel!.changingPlotParameters.yMin = -0.1
         plotDataModel!.changingPlotParameters.xMax = xMax
         plotDataModel!.changingPlotParameters.xMin = -xMax/10
@@ -207,8 +207,8 @@ class HistogramPlot: ObservableObject {
         //set the Plot Parameters
         plotDataModel!.changingPlotParameters.yMax = 1.2
         plotDataModel!.changingPlotParameters.yMin = 0.0
-        plotDataModel!.changingPlotParameters.xMax = 2
-        plotDataModel!.changingPlotParameters.xMin = -2
+        plotDataModel!.changingPlotParameters.xMax = xMax
+        plotDataModel!.changingPlotParameters.xMin = xMin
         plotDataModel!.changingPlotParameters.xLabel = "E/N"
         plotDataModel!.changingPlotParameters.yLabel = "Counts"
         plotDataModel!.changingPlotParameters.lineColor = .blue()
@@ -221,8 +221,8 @@ class HistogramPlot: ObservableObject {
         
         //print("\(dataPoints)")
         
-        for i in stride(from: xMin, to: xMax, by: Double.Stride((dataPoints.count - 1) / 16)) {
-            plotData.append([.X: (2 * i / xMax), .Y: Double(dataPoints[Int(i)]!) / yMax ]) //SOME DATA POINTS
+        for i in stride(from: xMin, to: xMax, by: 4) {
+            plotData.append([.X: i, .Y: Double(dataPoints[Int(i)]!) / yMax ]) //SOME DATA POINTS
         }
             
         plotDataModel!.appendData(dataPoint: plotData)

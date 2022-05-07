@@ -20,7 +20,7 @@ class WLSampling: NSObject, ObservableObject {
     var hist: [Int : Int] = [:]
     
     
-    func wangLandau(tempurature: Double, numberOfAtoms: Int, spinVector: [Int], fac: Double) -> [Int] {
+    func wangLandau(numberOfAtoms: Int, spinVector: [Int], fac: Double) -> [Int] {
         
         
         let spinFlipIndexRow = Int.random(in: 0..<numberOfAtoms)

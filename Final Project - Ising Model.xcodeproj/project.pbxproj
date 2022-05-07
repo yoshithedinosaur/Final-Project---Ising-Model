@@ -13,8 +13,6 @@
 		A356BFE12800B1B900A57928 /* Tests_macOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356BFE02800B1B900A57928 /* Tests_macOSLaunchTests.swift */; };
 		A356BFE22800B1B900A57928 /* Final_Project___Ising_ModelApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356BFBA2800B1B600A57928 /* Final_Project___Ising_ModelApp.swift */; };
 		A356BFE32800B1B900A57928 /* Final_Project___Ising_ModelApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356BFBA2800B1B600A57928 /* Final_Project___Ising_ModelApp.swift */; };
-		A356BFE42800B1B900A57928 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356BFBB2800B1B600A57928 /* ContentView.swift */; };
-		A356BFE52800B1B900A57928 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356BFBB2800B1B600A57928 /* ContentView.swift */; };
 		A356BFE62800B1B900A57928 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A356BFBC2800B1B800A57928 /* Assets.xcassets */; };
 		A356BFE72800B1B900A57928 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A356BFBC2800B1B800A57928 /* Assets.xcassets */; };
 		A356BFF82800B23100A57928 /* CorePlot in Frameworks */ = {isa = PBXBuildFile; productRef = A356BFF72800B23100A57928 /* CorePlot */; };
@@ -31,6 +29,7 @@
 		A356C00D2802186E00A57928 /* MetropolisAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356C00B2802186E00A57928 /* MetropolisAlgorithm.swift */; };
 		A35AB5852825971400B94BBB /* WLSampling.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35AB5842825971400B94BBB /* WLSampling.swift */; };
 		A35AB5862825971400B94BBB /* WLSampling.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35AB5842825971400B94BBB /* WLSampling.swift */; };
+		A35AB5872826A2C000B94BBB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A356BFBB2800B1B600A57928 /* ContentView.swift */; };
 		A3D79D7528033599006DC3BB /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7428033599006DC3BB /* DrawingView.swift */; };
 		A3D79D7628033599006DC3BB /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7428033599006DC3BB /* DrawingView.swift */; };
 		A3D79D7828037F30006DC3BB /* PlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D79D7728037F30006DC3BB /* PlotView.swift */; };
@@ -357,7 +356,6 @@
 				A3D79D7528033599006DC3BB /* DrawingView.swift in Sources */,
 				A356C00C2802186E00A57928 /* MetropolisAlgorithm.swift in Sources */,
 				A356C0002800B3F300A57928 /* PlotDataClass.swift in Sources */,
-				A356BFE42800B1B900A57928 /* ContentView.swift in Sources */,
 				A356BFE22800B1B900A57928 /* Final_Project___Ising_ModelApp.swift in Sources */,
 				A356C0032800B41800A57928 /* PlotClass.swift in Sources */,
 				A356C0062800B43E00A57928 /* ChangingPlotParameters.swift in Sources */,
@@ -374,8 +372,8 @@
 				A3D79D7628033599006DC3BB /* DrawingView.swift in Sources */,
 				A356C00D2802186E00A57928 /* MetropolisAlgorithm.swift in Sources */,
 				A356C0012800B3F300A57928 /* PlotDataClass.swift in Sources */,
-				A356BFE52800B1B900A57928 /* ContentView.swift in Sources */,
 				A356BFE32800B1B900A57928 /* Final_Project___Ising_ModelApp.swift in Sources */,
+				A35AB5872826A2C000B94BBB /* ContentView.swift in Sources */,
 				A356C0042800B41800A57928 /* PlotClass.swift in Sources */,
 				A356C0072800B43E00A57928 /* ChangingPlotParameters.swift in Sources */,
 				A3D79D7928037F30006DC3BB /* PlotView.swift in Sources */,

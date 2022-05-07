@@ -11,7 +11,7 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
     
     @Published var enableButton = true
     @Published var interactionDistance: Int = 1
-
+    
     
     let exchangeEnergy = 1.0
     //let kB = 8.617333262145e-5 // [eV/K]
@@ -189,7 +189,7 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
             }
             
             
-                
+            
         }
         else{
             
@@ -200,7 +200,7 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
                     self.enableButton = false
                 }
             }
-                
+            
         }
         
     }
