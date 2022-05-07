@@ -20,6 +20,8 @@ struct ContentView: View {
     @ObservedObject private var magPlotModel = MagPlot()
     @ObservedObject private var u2PlotModel = FluctuationPlot()
     @ObservedObject private var specHeatPlotModel = SpecificHeatPlot()
+    @ObservedObject private var histogramPlotModel = HistogramPlot()
+    @ObservedObject private var probabilityPlotModel = ProbabilityPlot()
     @State private var isEditingAtoms = false
     @State private var isEditingSteps = false
     @State private var numberOfAtoms: Double = 100
@@ -32,6 +34,7 @@ struct ContentView: View {
     @State private var magnetizationString = ""
     @State private var internalEString = ""
     @State private var specificHeatString = ""
+    @State private var distanceString = "1"
     @State var colorPalette: [Color] = [.yellow, .blue]
     @State var simSteps: Int = 0
     @State var countOfRows: Int = 16
@@ -43,8 +46,11 @@ struct ContentView: View {
     @State var hasButtonBeenPressed = false
     @State var is1D = true
     @State var viewString = "1D Ising Model"
+    @State var usingWL = false
+    @State var simMethod = "Metropolis"
     
     let isingSim = MetropolisAlgorithm()
+    let isingWL = WLSampling()
     
     
     var body: some View {
@@ -150,6 +156,10 @@ struct ContentView: View {
                                 .frame(width: 120, height: 30)
                                 .disabled(plotDisableButton)
                             
+                            Text("Interaction Distance")
+                            TextField("distance", text: $distanceString)
+                                .frame(width: 50)
+                            
                         }
                         
                     }
@@ -171,11 +181,11 @@ struct ContentView: View {
                                label: { Text("Number of atoms:") })
                     } else {
                         Slider(value: $numberOfAtoms,
-                               in: 50...500,
-                               step: 50,
+                               in: 16...512,
+                               step: 16,
                                onEditingChanged: { editing in isEditingAtoms = editing },
-                               minimumValueLabel: Text("50"),
-                               maximumValueLabel: Text("500"),
+                               minimumValueLabel: Text("16"),
+                               maximumValueLabel: Text("512"),
                                label: { Text("Atom grid size:") })
                             .disabled(!pauseStatus)
                     }
@@ -204,6 +214,8 @@ struct ContentView: View {
                             TextField("Steps", text: $simulationStepsString)
                             .frame(width: 50)
                         }
+                        
+                        
                         
                     }
                     
@@ -237,9 +249,9 @@ struct ContentView: View {
                             Button(action: { Task.init { await self.ising2D() } }, label: { Image(systemName: "play.fill") } )
                                 .padding()
                                 .frame(width: 50)
-                                //.disabled(isingSim.enableButton == false)
+                                .disabled(!pauseStatus)
                             
-                            Button(action: { Task.init { await self.pauseSimulation() } }, label: { Image(systemName: "pause.fill") } )
+                            Button(action: { Task.init { await self.pauseSimulation() } }, label: { Image(systemName: "square.fill") } )
                                 .padding()
                                 .frame(width: 50)
                                 //.disabled(isingSim.enableButton == false)
@@ -248,6 +260,10 @@ struct ContentView: View {
                                 .padding()
                                 .frame(width: 50)
                                 //.disabled(isingSim.enableButton == false)
+                            
+                            Button("\(simMethod)" ,action: { Task.init { await self.switchMethods() } } )
+                                .padding()
+                                .frame(width: 150)
                             
                         }
                         
@@ -304,6 +320,7 @@ struct ContentView: View {
         hasButtonBeenPressed = false
         
         isingSim.setButtonEnable(state: false)
+        isingSim.interactionDistance = Int(distanceString) ?? 1
         
        
         simSteps = Int(simulationStepsString) ?? 1
@@ -346,7 +363,7 @@ struct ContentView: View {
         
         internalEString = "\(calculateInternalE(spinVector: spinVector))"
         
-        magnetizationString = "\(Double(countOfRows) - 2.0 * countedItems[-1]! )"
+        magnetizationString = "\((Double(countOfRows) - 2.0 * countedItems[-1]!) / numberOfAtoms )"
         
         ratioPlotModel.plotDataModel = self.plotDataModel
         ratioPlotModel.plotRatio(dataPoints: plottingPoints, xMax: Double(simSteps))
@@ -510,8 +527,11 @@ struct ContentView: View {
             
                 while currentStep < simSteps {
             
-                    
-                    spinVector = isingSim.updateSpinVector1D(tempurature: kBtemperature/isingSim.kB, numberOfAtoms: Int(numberOfAtoms), spinVector: spinVector)
+                    if is1D {
+                        spinVector = isingSim.updateSpinVector1D(tempurature: kBtemperature/isingSim.kB, numberOfAtoms: Int(numberOfAtoms), spinVector: spinVector)
+                    } else {
+                        spinVector = isingSim.updateSpinVector2D(tempurature: kBtemperature/isingSim.kB, numberOfAtoms: Int(numberOfAtoms), spinVector: spinVector)
+                    }
             
                     if currentStep == simSteps-1 {
                 
@@ -523,7 +543,7 @@ struct ContentView: View {
                         mappedItems = spinVector.map{ ( $0, 1 ) }
                         countedItems = Dictionary(mappedItems, uniquingKeysWith: +)
                         
-                        currentMag += Double(countOfRows) - 2.0 * countedItems[-1]!
+                        currentMag += (Double(countOfRows) - 2.0 * countedItems[-1]!) / Double(spinVector.count)
                         
                         currentFluc += pow(/*Double(countOfRows) */ (calculateInternalE(spinVector: state1D) + 1.0), 2)
                         
@@ -596,17 +616,36 @@ struct ContentView: View {
         if is1D {
             viewString = "2D Ising Model"
             is1D = false
-            finalState = finalState2D
+            finalState.removeAll()
             numberOfAtoms = min(numberOfAtoms, 500)
             
         } else {
             viewString = "1D Ising Model"
             is1D = true
-            finalState = finalState1D
+            finalState.removeAll()
             await pauseSimulation()
         }
         
     }
+    
+    
+    @MainActor func switchMethods() async {
+        
+        if !usingWL {
+            simMethod = "Wang-Landau"
+            usingWL = true
+            finalState.removeAll()
+            await pauseSimulation()
+            
+        } else {
+            simMethod = "Metropolis"
+            usingWL = false
+            finalState.removeAll()
+            await pauseSimulation()
+        }
+        
+    }
+    
     
     
     @State var pauseStatus = true
@@ -619,6 +658,8 @@ struct ContentView: View {
         magnetizationvsT.removeAll()
         fluctuationvsT.removeAll()
         specificHeatvsT.removeAll()
+        isingWL.hist.removeAll()
+        isingWL.lnProbDensity.removeAll()
         hasButtonBeenPressed = false
         
         isingSim.setButtonEnable(state: false)
@@ -628,31 +669,131 @@ struct ContentView: View {
         countOfRows = Int(numberOfAtoms)
         viewSteps = countOfRows
         
+        if usingWL {
+            
+            isingWL.lnProbDensity.append(contentsOf: repeatElement(0.0, count: countOfRows * countOfRows))
+            
+            for i in 0..<countOfRows * countOfRows {
+                
+                isingWL.hist[-2 * countOfRows * countOfRows + 2 * i] = 0
+                
+                isingWL.hist[abs(-2 * countOfRows * countOfRows + 2 * i)] = 0
+                
+            }
+            
+            isingWL.hist[0] = 0
+            
+        }
+        
+        
+        let dummyHist = isingWL.hist
+        
+        var fac = 1.0
+        
         var spinVector = generateInitialState(numberOfAtoms: Int(numberOfAtoms), startState: startState)
         
         finalState = spinVector
         
-        let timer = Timer.scheduledTimer(withTimeInterval: 0.000000001, repeats: true) { timer in
-            //print("delayed message")
+        var counts: Int = 0
+        
+        if usingWL {
+        
+            let timer = Timer.scheduledTimer(withTimeInterval: 0.000000001, repeats: true) { timer in
+                //print("delayed message")
             
             /*let _ = await withTaskGroup(of: Void.self) { taskGroup in taskGroup.addTask(priority: .high) {
                 <#code#>
                 }
             }*/
-            for _ in 0...Int(stepsPerUpdate) {
-            spinVector = isingSim.updateSpinVector2D(tempurature: Double(temperatureString) ?? 0, numberOfAtoms: Int(numberOfAtoms), spinVector: spinVector)
             
-            finalState = spinVector
+                for _ in 0...Int(stepsPerUpdate) {
+                    spinVector = isingWL.wangLandau(tempurature: Double(temperatureString) ?? 0, numberOfAtoms: Int(numberOfAtoms), spinVector: spinVector, fac: fac)
+            
+                    finalState = spinVector
+                    
+                    //isingWL.lnProbDensity = normalizeProbDensity()
+                
+                    counts += 1
+            
+                    if counts%10000 == 0 {
+                    
+                        let maxH = isingWL.hist.values.max()!
+                    
+                        let minH = isingWL.hist.values.min()!
+                    
+                        if (Double(maxH - minH) / Double(maxH + minH)) > 0.2  {
+                        
+                            fac = fac/2
+                        
+                            isingWL.hist = dummyHist
+                        
+                        }
+                        
+                        print("10,000 COUNTS REACHED")
+                    
+                    }
+                
+                }
+                
+                /*if counts%100 == 0 {
+                    histogramPlotModel.plotDataModel = self.plotDataModel
+                    histogramPlotModel.plotHistogram(dataPoints: isingWL.hist, xMax: 2 * numberOfAtoms * numberOfAtoms, xMin: -2 * numberOfAtoms * numberOfAtoms, yMax: Double(isingWL.hist.values.max()!))
+                }*/
+                
+                /*if counts%100 == 0 {
+                    probabilityPlotModel.plotDataModel = self.plotDataModel
+                    probabilityPlotModel.plotProbability(dataPoints: isingWL.lnProbDensity, yMax: Double(isingWL.lnProbDensity.max()!), numberOfAtoms: Int(numberOfAtoms))
+                    //print(isingWL.lnProbDensity)
+                }*/
+                
+            
+                if pauseStatus {
+                    timer.invalidate()
+                    
+                }
+                
             }
             
-            if pauseStatus {
-                timer.invalidate()
+        } else {
+            
+            
+            let timer = Timer.scheduledTimer(withTimeInterval: 0.000000001, repeats: true) { timer in
+                //print("delayed message")
+            
+            /*let _ = await withTaskGroup(of: Void.self) { taskGroup in taskGroup.addTask(priority: .high) {
+                <#code#>
+                }
+            }*/
+            
+                for _ in 0...Int(stepsPerUpdate) {
+                    spinVector = isingSim.updateSpinVector2D(tempurature: Double(temperatureString) ?? 0, numberOfAtoms: Int(numberOfAtoms), spinVector: spinVector)
+            
+                    finalState = spinVector
+                
+                
+                }
+            
+                if pauseStatus {
+                    timer.invalidate()
+                    
+                }
+                
             }
             
         }
         
-        
     }
+    
+    
+    func normalizeProbDensity(numberOfAtoms: Double) -> [Double]{
+        var normalizedlnPD: [Double] = []
+        
+        pow(numberOfAtoms, 2) * log(2)
+        
+        return normalizedlnPD
+    }
+    
+    
     
     @MainActor func pauseSimulation() async {
         print("pause button pressed")
@@ -663,7 +804,8 @@ struct ContentView: View {
     @MainActor func resetSimulation() async {
         pauseStatus = true
         viewSteps = Int(numberOfAtoms)
-        finalState = generateInitialState(numberOfAtoms: Int(numberOfAtoms), startState: startState)
+        finalState.removeAll()
+        //finalState = generateInitialState(numberOfAtoms: Int(numberOfAtoms), startState: startState)
     }
     
 }

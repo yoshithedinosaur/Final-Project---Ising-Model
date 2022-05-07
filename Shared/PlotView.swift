@@ -33,7 +33,7 @@ class RatioPlot: ObservableObject {
         plotDataModel!.zeroData()
         var plotData :[plotDataType] =  []
         
-        print("\(dataPoints)")
+        //print("\(dataPoints)")
         
         for i in 0...dataPoints.endIndex-1 {
             plotData.append([.X: dataPoints[i].xPoint, .Y: dataPoints[i].yPoint]) //SOME DATA POINTS
@@ -70,7 +70,7 @@ class InternalEPlot: ObservableObject {
         plotDataModel!.zeroData()
         var plotData :[plotDataType] =  []
         
-        print("\(dataPoints)")
+        //print("\(dataPoints)")
         
         for i in 0...dataPoints.endIndex-1 {
             plotData.append([.X: dataPoints[i].xPoint, .Y: dataPoints[i].yPoint]) //SOME DATA POINTS
@@ -192,3 +192,79 @@ class SpecificHeatPlot: ObservableObject {
 }
 
 
+
+class HistogramPlot: ObservableObject {
+    var plotDataModel: PlotDataClass? = nil
+    
+    
+    //temp parameter declaration
+    let xMin = 0.0
+    let xMax = 10.0
+    let xStep = 0.01
+    
+    @MainActor func plotHistogram(dataPoints: [Int : Int], xMax: Double, xMin: Double, yMax: Double) {
+        
+        //set the Plot Parameters
+        plotDataModel!.changingPlotParameters.yMax = 1.2
+        plotDataModel!.changingPlotParameters.yMin = 0.0
+        plotDataModel!.changingPlotParameters.xMax = 2
+        plotDataModel!.changingPlotParameters.xMin = -2
+        plotDataModel!.changingPlotParameters.xLabel = "E/N"
+        plotDataModel!.changingPlotParameters.yLabel = "Counts"
+        plotDataModel!.changingPlotParameters.lineColor = .blue()
+        plotDataModel!.changingPlotParameters.title = "Histogram of Energies"
+        plotDataModel!.changingPlotParameters.yTickSpacing = 10.0
+        plotDataModel!.changingPlotParameters.xTickSpacing = 20.0
+        
+        plotDataModel!.zeroData()
+        var plotData :[plotDataType] =  []
+        
+        //print("\(dataPoints)")
+        
+        for i in stride(from: xMin, to: xMax, by: Double.Stride((dataPoints.count - 1) / 16)) {
+            plotData.append([.X: (2 * i / xMax), .Y: Double(dataPoints[Int(i)]!) / yMax ]) //SOME DATA POINTS
+        }
+            
+        plotDataModel!.appendData(dataPoint: plotData)
+        
+    }
+}
+
+
+class ProbabilityPlot: ObservableObject {
+    var plotDataModel: PlotDataClass? = nil
+    
+    
+    //temp parameter declaration
+    let xMin = 0.0
+    let xMax = 10.0
+    let xStep = 0.01
+    
+    @MainActor func plotProbability(dataPoints: [Double], yMax: Double, numberOfAtoms: Int) {
+        
+        //set the Plot Parameters
+        plotDataModel!.changingPlotParameters.yMax = 1.2
+        plotDataModel!.changingPlotParameters.yMin = 0.0
+        plotDataModel!.changingPlotParameters.xMax = 2
+        plotDataModel!.changingPlotParameters.xMin = -2
+        plotDataModel!.changingPlotParameters.xLabel = "E/N"
+        plotDataModel!.changingPlotParameters.yLabel = "Counts"
+        plotDataModel!.changingPlotParameters.lineColor = .blue()
+        plotDataModel!.changingPlotParameters.title = "Probability density"
+        plotDataModel!.changingPlotParameters.yTickSpacing = 10.0
+        plotDataModel!.changingPlotParameters.xTickSpacing = 20.0
+        
+        plotDataModel!.zeroData()
+        var plotData :[plotDataType] =  []
+        
+        //print("\(dataPoints)")
+        
+        for i in 0..<numberOfAtoms*numberOfAtoms {
+            var xPoint = Double(i) * 4 / Double(numberOfAtoms * numberOfAtoms) - 2
+            plotData.append([.X: xPoint, .Y: dataPoints[i] / yMax ]) //SOME DATA POINTS
+        }
+            
+        plotDataModel!.appendData(dataPoint: plotData)
+        
+    }
+}

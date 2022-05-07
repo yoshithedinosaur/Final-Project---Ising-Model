@@ -10,6 +10,7 @@ import Foundation
 class MetropolisAlgorithm: NSObject, ObservableObject {
     
     @Published var enableButton = true
+    @Published var interactionDistance: Int = 1
 
     
     let exchangeEnergy = 1.0
@@ -27,7 +28,7 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
         trialSpinVector[spinFlipIndex] = -spinVector[spinFlipIndex]
         
         // Only the differences between the pairs including the changed spin remain
-        for i in spinFlipIndex-1...spinFlipIndex {
+        for i in spinFlipIndex-interactionDistance...spinFlipIndex {
             deltaSpinSum += trialSpinVector[modulo(dividend: i, divisor: numberOfAtoms)] * trialSpinVector[modulo(dividend: i+1, divisor: numberOfAtoms)] - spinVector[modulo(dividend: i, divisor: numberOfAtoms)] * spinVector[modulo(dividend: i+1, divisor: numberOfAtoms)]
         }
         //print("\(spinVector)")
@@ -61,6 +62,8 @@ class MetropolisAlgorithm: NSObject, ObservableObject {
         }
         
     }
+    
+    
     
     func updateSpinVector2D(tempurature: Double, numberOfAtoms: Int, spinVector: [Int]) -> [Int] {
         
